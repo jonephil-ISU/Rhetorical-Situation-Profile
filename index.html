@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rhetorical Situation Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0B1F3A;
+    --navy-light: #16305A;
+    --orange: #C1440E;
+    --orange-light: #E8722E;
+    --cream: #F7F4EF;
+    --paper: #FFFFFF;
+    --ink: #1C2126;
+    --muted: #5B6472;
+    --line: #E1DCD2;
+    --good: #2E6B4F;
+    --good-bg: #E9F5EF;
+    --good-border: #2E6B4F;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--cream); color: var(--ink); font-family: 'IBM Plex Sans', sans-serif; line-height: 1.5; }
+  h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.01em; }
+
+  .masthead { background: var(--navy); color: white; padding: 36px 24px 60px; position: relative; overflow: hidden; }
+  .masthead::after { content:""; position:absolute; right:-60px; top:-60px; width:260px; height:260px; border-radius:50%; background:radial-gradient(circle, rgba(193,68,14,0.35), transparent 70%); }
+  .masthead-inner { max-width: 780px; margin: 0 auto; position: relative; z-index: 1; }
+  .eyebrow { display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.12em; text-transform:uppercase; color:var(--orange-light); border:1px solid rgba(232,114,46,0.5); padding:4px 10px; border-radius:999px; margin-bottom:14px; }
+  .masthead h1 { font-size: 30px; margin: 0 0 8px; font-weight:700; }
+  .masthead p { max-width: 600px; color:#C9D2E0; font-size:14.5px; margin:0; }
+
+  .wrap { max-width: 780px; margin: -36px auto 80px; padding: 0 24px; position: relative; z-index: 2; }
+  .wrap.wide { max-width: 1120px; }
+  .wrap.wide .card { padding: 30px 24px; }
+
+  .progress { display:flex; gap:6px; margin-bottom: 16px; }
+  .progress-dot { height:5px; flex:1; background:var(--line); border-radius:3px; overflow:hidden; }
+  .progress-dot.done { background: var(--orange); }
+
+  .card { background: var(--paper); border:1px solid var(--line); border-radius:14px; padding:30px 28px; box-shadow:0 1px 2px rgba(11,31,58,0.04); }
+  .card h2 { font-size: 20px; margin: 0 0 6px; }
+  .card .sub { color: var(--muted); font-size: 14.5px; margin: 0 0 22px; }
+
+  .option-btn {
+    display: block; width: 100%; text-align: left; background: var(--cream); border: 1.5px solid var(--line);
+    border-radius: 10px; padding: 16px 18px; margin-bottom: 12px; font-family:'IBM Plex Sans',sans-serif;
+    font-size: 15px; font-weight: 600; color: var(--ink); cursor: pointer; transition: all 0.12s;
+  }
+  .option-btn:hover { border-color: var(--orange); background: #FBEFE6; }
+  .option-btn .desc { display:block; font-weight:400; font-size:13px; color:var(--muted); margin-top:4px; }
+
+  .nav-row { display:flex; justify-content:space-between; align-items:center; margin-top: 24px; }
+  .btn { background: var(--orange); color:white; border:none; font-family:'IBM Plex Sans',sans-serif; font-weight:600; font-size:14px; padding:11px 20px; border-radius:8px; cursor:pointer; }
+  .btn:hover { background: var(--orange-light); }
+  .btn:disabled { background: var(--line); color: var(--muted); cursor: not-allowed; }
+  .btn.secondary { background: transparent; color: var(--navy); border: 1.5px solid var(--line); }
+  .btn.secondary:hover { background: var(--cream); border-color: var(--navy); }
+  .btn.ghost { background:none; color: var(--muted); border:none; font-size:13.5px; padding:8px 4px; text-decoration: underline; cursor:pointer; }
+
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  label { display:block; font-size:13px; font-weight:600; color: var(--navy); margin: 18px 0 6px; }
+  .field-hint { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
+  textarea, input[type=text] {
+    width:100%; font-family:'IBM Plex Sans',sans-serif; font-size:14.5px; padding:10px 12px;
+    border:1.5px solid var(--line); border-radius:8px; background:var(--cream); color:var(--ink); resize:vertical; min-height: 90px;
+  }
+  textarea:focus, input[type=text]:focus { outline:none; border-color:var(--orange); background:white; }
+  .word-count { font-size: 11.5px; color: var(--muted); text-align:right; margin-top:3px; font-family:'IBM Plex Mono',monospace; }
+  .word-count.over { color: var(--orange); }
+
+  .banner-success {
+    background: var(--good-bg); border: 1.5px solid var(--good-border); border-radius: 10px;
+    padding: 16px 18px; margin-bottom: 20px; font-size: 14.5px; color: #1F4A38;
+  }
+  .banner-warning {
+    background: #FBEFE6; border-left: 4px solid var(--orange); border-radius: 0 10px 10px 0;
+    padding: 14px 16px; margin: 16px 0; font-size: 14px;
+  }
+  .banner-warning b { color: var(--orange); }
+  .banner-pending {
+    background: #EEF1F6; border: 1.5px dashed var(--navy); border-radius: 10px;
+    padding: 16px 18px; margin: 16px 0; font-size: 13.5px; color: var(--navy);
+  }
+  .banner-info {
+    background: #EEF1F6; border-left: 4px solid var(--navy); border-radius: 0 10px 10px 0;
+    padding: 14px 16px; margin: 20px 0; font-size: 14px; color: var(--ink);
+  }
+  .banner-info b { color: var(--navy); }
+
+  .step-list { list-style: none; padding: 0; margin: 0 0 20px; counter-reset: step-counter; }
+  .step-list li { counter-increment: step-counter; position: relative; padding: 0 0 18px 40px; }
+  .step-list li::before {
+    content: counter(step-counter); position: absolute; left: 0; top: 0;
+    width: 26px; height: 26px; background: var(--navy); color: white; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-family:'IBM Plex Mono',monospace; font-size: 12px; font-weight: 600;
+  }
+  .step-list li strong { display: block; font-size: 14.5px; margin-bottom: 2px; }
+  .step-list li span { font-size: 13.5px; color: var(--muted); }
+
+  .check-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .check-row:last-child { border-bottom: none; }
+  .check-row input[type=checkbox] { margin-top: 3px; width: 18px; height: 18px; accent-color: var(--orange); cursor: pointer; flex-shrink: 0; }
+  .check-row label { margin: 0; font-size: 14.5px; font-weight: 600; cursor: pointer; }
+  .check-row .check-desc { display: block; font-weight: 400; font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+  .summary-box { background: var(--ink); color:#E7ECF4; border-radius:12px; padding:20px; font-family:'IBM Plex Mono',monospace; font-size:12px; white-space:pre-wrap; max-height:360px; overflow-y:auto; margin-top:16px; line-height:1.6; }
+  .copy-row { display:flex; gap:10px; align-items:center; margin-top:14px; flex-wrap:wrap; }
+  .copy-status { font-size:13px; color:var(--good); font-weight:600; opacity:0; transition:opacity .2s; }
+  .copy-status.show { opacity:1; }
+  .footer-note { text-align:center; color:var(--muted); font-size:12.5px; margin:36px auto 0; }
+
+  /* ===== Merged from Rhetorical Situation Builder (Pathway 6) ===== */
+  :root {
+    --navy: #0B1F3A;
+    --navy-light: #16305A;
+    --orange: #C1440E;
+    --orange-light: #E8722E;
+    --cream: #F7F4EF;
+    --paper: #FFFFFF;
+    --ink: #1C2126;
+    --muted: #5B6472;
+    --line: #E1DCD2;
+    --good: #2E6B4F;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    line-height: 1.5;
+  }
+  h1, h2, h3, .display {
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: -0.01em;
+  }
+  .mono { font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.02em; }
+
+  /* Header */
+  .masthead {
+    background: var(--navy);
+    color: white;
+    padding: 40px 24px 90px;
+    position: relative;
+    overflow: hidden;
+  }
+  .masthead::after {
+    content: "";
+    position: absolute;
+    right: -60px; top: -60px;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(193,68,14,0.35), transparent 70%);
+  }
+  .masthead-inner { max-width: 1080px; margin: 0 auto; position: relative; z-index: 1; }
+  .eyebrow {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--orange-light);
+    border: 1px solid rgba(232,114,46,0.5);
+    padding: 4px 10px;
+    border-radius: 999px;
+    margin-bottom: 16px;
+  }
+  .masthead h1 { font-size: 34px; margin: 0 0 10px; font-weight: 700; }
+  .masthead p { max-width: 640px; color: #C9D2E0; font-size: 15px; margin: 0; }
+
+  /* Compact pinned bar, mobile only */
+  .mobile-pin {
+    display: none;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--navy);
+    border-bottom: 2px solid var(--orange);
+    padding: 10px 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .mobile-pin-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .mobile-pin-row::-webkit-scrollbar { display: none; }
+  .mobile-pin-block { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .mobile-pin-tag { font-family: 'IBM Plex Mono', monospace; font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--orange-light); }
+  .mobile-pin-name { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; color: white; white-space: nowrap; }
+  .mobile-pin-chip {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: #E7ECF4;
+    background: rgba(255,255,255,0.1);
+    padding: 3px 8px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .mobile-pin-empty { color: #5C6C8A; font-style: italic; font-size: 11px; }
+  .mobile-pin-divider { width: 1px; height: 18px; background: rgba(255,255,255,0.2); flex-shrink: 0; }
+  @media (max-width: 860px) {
+    .mobile-pin { display: block; }
+  }
+
+  /* Layout */
+  .rs-grid {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 28px;
+    align-items: start;
+    margin-top: 20px;
+  }
+  @media (max-width: 860px) {
+    .rs-grid { grid-template-columns: 1fr; margin-top: 20px; }
+    .side-col { order: -1; }
+  }
+
+  /* Step cards */
+  .step {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 28px 28px 30px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 2px rgba(11,31,58,0.04);
+  }
+  .step-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  .step-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: white;
+    background: var(--navy);
+    padding: 3px 9px;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+  .step h2 { font-size: 19px; margin: 0; }
+  .step .academic { color: var(--muted); font-size: 14px; font-style: italic; font-weight: 400; margin-left: 4px; }
+  .step-prompt { color: var(--muted); font-size: 14.5px; margin: 10px 0 16px; }
+  .sub-block { border-top: 1px dashed var(--line); margin-top: 22px; padding-top: 18px; }
+  .sub-block:first-of-type { border-top: none; margin-top: 8px; padding-top: 0; }
+  .sub-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--orange); margin-bottom: 8px; }
+
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    margin: 16px 0 6px;
+  }
+  input[type=text], textarea, select {
+    width: 100%;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14.5px;
+    padding: 10px 12px;
+    border: 1.5px solid var(--line);
+    border-radius: 8px;
+    background: var(--cream);
+    color: var(--ink);
+    resize: vertical;
+  }
+  input[type=text]:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--orange);
+    background: white;
+  }
+  textarea { min-height: 70px; }
+  select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--navy) 50%), linear-gradient(135deg, var(--navy) 50%, transparent 50%); background-position: calc(100% - 18px) center, calc(100% - 13px) center; background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; cursor: pointer; }
+
+  .char-counter { font-size: 11.5px; color: var(--muted); text-align: right; margin-top: 4px; font-family: 'IBM Plex Mono', monospace; }
+  .char-counter.warn { color: var(--orange); }
+  .locked-input { border-color: var(--navy); }
+
+  /* Yes/No toggle */
+  .toggle-row { display: flex; gap: 10px; margin-top: 8px; }
+  .toggle-opt { flex: 1; }
+  .toggle-opt input[type=radio] { display: none; }
+  .toggle-opt label.toggle-label {
+    display: block;
+    text-align: center;
+    padding: 9px 10px;
+    border: 1.5px solid var(--line);
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    margin: 0;
+    transition: all 0.12s;
+  }
+  .toggle-opt input[type=radio]:checked + label.toggle-label {
+    border-color: var(--orange);
+    background: #FBEFE6;
+    color: var(--orange);
+  }
+  .toggle-followup { display: none; margin-top: 12px; }
+  .toggle-followup.show { display: block; }
+
+  /* Comparison rows (equipment) */
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 560px) { .compare-grid { grid-template-columns: 1fr; } }
+  .compare-col-label { font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 6px; }
+  .feature-row { display: grid; grid-template-columns: 1fr 1.4fr; gap: 10px; margin-top: 10px; align-items: start; }
+  @media (max-width: 560px) { .feature-row { grid-template-columns: 1fr; } }
+  .feature-row input, .feature-row textarea { margin: 0; }
+  .feature-tag { font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: var(--orange); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; display: block; }
+
+  /* Callouts */
+  .callout {
+    border-left: 4px solid var(--orange);
+    background: #FBEFE6;
+    border-radius: 0 10px 10px 0;
+    padding: 12px 16px;
+    margin-top: 16px;
+    font-size: 13.5px;
+  }
+  .callout b { color: var(--orange); }
+  .diagnostic {
+    border-left: 4px solid var(--navy);
+    background: #EEF1F6;
+    border-radius: 0 10px 10px 0;
+    padding: 12px 16px;
+    margin-top: 14px;
+    font-size: 13.5px;
+    display: none;
+  }
+  .diagnostic.show { display: block; }
+  .diagnostic b { color: var(--navy); }
+
+  /* Rules list (static) */
+  .rules-list { font-size: 14px; margin: 10px 0; padding-left: 20px; }
+  .rules-list li { margin-bottom: 6px; }
+
+  /* Sidebar cards */
+  .side-col { position: sticky; top: 20px; display: flex; flex-direction: column; gap: 16px; }
+  .rs-card {
+    background: var(--navy);
+    color: white;
+    border-radius: 14px;
+    padding: 20px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .rs-card.small { padding: 16px 18px; }
+  .ribbon {
+    position: absolute;
+    top: 18px; right: -42px;
+    background: var(--orange);
+    color: white;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.07em;
+    padding: 3px 40px;
+    transform: rotate(45deg);
+    white-space: nowrap;
+  }
+  .rs-card h3 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--orange-light); margin: 0 0 12px; font-family: 'IBM Plex Mono', monospace; }
+  .card-name { font-size: 20px; font-weight: 700; margin-bottom: 2px; min-height: 26px; font-family: 'Space Grotesk', sans-serif; }
+  .card-role { font-size: 12.5px; color: #AEBBD1; margin-bottom: 14px; min-height: 16px; }
+  .card-field { margin-bottom: 12px; }
+  .card-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--orange-light); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 3px; }
+  .card-value { font-size: 13px; color: #E7ECF4; min-height: 16px; }
+  .card-empty { color: #5C6C8A; font-style: italic; }
+  .card-progress { margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.15); font-size: 11px; color: #8FA0BE; font-family: 'IBM Plex Mono', monospace; }
+  .vs-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: start; }
+  .vs-divider { color: var(--orange-light); font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding-top: 4px; }
+
+  /* Buttons */
+  .btn {
+    display: inline-block;
+    background: var(--orange);
+    color: white;
+    border: none;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 12px 22px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .btn:hover { background: var(--orange-light); }
+
+  /* Summary section */
+  .summary-box {
+    background: var(--ink);
+    color: #E7ECF4;
+    border-radius: 12px;
+    padding: 22px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    white-space: pre-wrap;
+    max-height: 380px;
+    overflow-y: auto;
+    margin-top: 16px;
+    line-height: 1.6;
+  }
+  .copy-row { display: flex; gap: 10px; align-items: center; margin-top: 14px; flex-wrap: wrap; }
+  .copy-status { font-size: 13px; color: var(--good); font-weight: 600; opacity: 0; transition: opacity 0.2s; }
+  .copy-status.show { opacity: 1; }
+
+  .footer-note { text-align: center; color: var(--muted); font-size: 12.5px; margin: 40px auto 0; max-width: 600px; }
+
+  /* On narrower screens, cards stack in a single column and each occupies its own
+     grid row sized to its own content, which gives position:sticky no room to
+     release once triggered, the card locks to the top of the screen permanently.
+     Disable sticky here so the cards scroll normally with the page. */
+  @media (max-width: 860px) {
+    .side-col { position: static; top: auto; }
+  }
+
+  /* Single-line inputs can't wrap their placeholder text, so long examples
+     clip on narrow screens. Shrinking the placeholder font (not the typed
+     text) keeps more of the example visible without changing field height. */
+  @media (max-width: 480px) {
+    input[type=text]::placeholder { font-size: 12.5px; }
+  }
+
+
+  /* Doing This Well boxes */
+  .doing-well { border: 1.5px solid var(--good); background: var(--good-bg); border-radius: 10px; padding: 14px 18px 8px; margin: 4px 0 18px; font-size: 13.5px; color: #1F4A38; }
+  .doing-well .dw-title { font-family: 'IBM Plex Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--good); font-weight: 600; margin-bottom: 6px; }
+  .doing-well ul { margin: 0 0 8px; padding-left: 20px; }
+  .doing-well li { margin-bottom: 5px; }
+  .doing-well .dw-note { margin: 0 0 8px; font-weight: 600; }
+
+
+  .save-notice { border: 2px solid var(--navy); background: #EEF1F6; border-radius: 10px; padding: 16px 18px 14px; margin-top: 18px; font-size: 14px; }
+  .save-notice .save-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 15.5px; color: var(--navy); margin-bottom: 6px; }
+  .save-notice p { margin: 0; color: var(--ink); }
+
+
+  /* Roadmap + feeds */
+  .roadmap { list-style:none; padding:0; margin:18px 0 6px; }
+  .roadmap li { border:1.5px solid var(--line); border-radius:10px; padding:14px 16px; margin-bottom:12px; background:#FCFAF6; }
+  .roadmap .rm-head { display:flex; justify-content:space-between; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:4px; }
+  .roadmap .rm-name { font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; color:var(--navy); }
+  .roadmap .rm-week { font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.06em; color:white; background:var(--orange); padding:2px 8px; border-radius:6px; white-space:nowrap; }
+  .roadmap .rm-what { font-size:14px; margin:0 0 6px; color:var(--ink); }
+  .roadmap .rm-from { font-size:13px; color:var(--muted); margin:0; }
+  .roadmap .rm-from b { color:var(--navy); }
+  .feeds { border-left:4px solid var(--orange); background:#FBEFE6; border-radius:0 10px 10px 0; padding:10px 14px; margin:4px 0 16px; font-size:13.5px; }
+  .feeds b { color:var(--orange); }
+
+
+  .roadmap li.rm-student { border: 3px solid var(--orange); background: #FFF4EC; padding: 18px 20px; }
+  .roadmap li.rm-student .rm-name { font-size: 22px; }
+  .roadmap li.rm-student .rm-what { font-size: 16px; }
+  .rm-bigwarn { font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:24px; line-height:1.2; color:white; background:var(--orange); border-radius:8px; padding:12px 16px; margin:10px 0 10px; text-align:center; letter-spacing:0.01em; }
+  .roadmap li.rm-student .rm-from { font-size:15px; color:var(--ink); }
+  .conclusion-banner { border: 3px solid var(--orange); background:#FFF4EC; border-radius:12px; padding:16px 20px; margin:18px 0 6px; text-align:center; }
+  .conclusion-banner .cb-big { font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:22px; color:var(--orange); line-height:1.25; }
+  .conclusion-banner .cb-small { font-size:15px; color:var(--ink); margin-top:4px; }
+
+  .page-wrap { max-width: 1120px; margin: 28px auto 80px; padding: 0 24px; }
+
+  .stuck { border:1.5px dashed var(--navy); background:#F5F7FB; border-radius:8px; padding:9px 13px; margin:0 0 16px; font-size:13.5px; color:var(--ink); }
+  .stuck b { color:var(--navy); }
+  .wc { font-size:12.5px; margin:4px 0 14px; color:var(--muted); }
+  .wc.ok { color:#1F7A4D; font-weight:600; }
+  .wc .hint { display:block; margin-top:2px; color:var(--orange); }
+  .guard-box { border:2px solid var(--orange); background:#FFF4EC; border-radius:10px; padding:12px 16px; margin:12px 0; font-size:14px; }
+  .guard-box.done { border-color:#1F7A4D; background:#EEF7F1; }
+  .guard-box ul { margin:6px 0 0 18px; padding:0; }
+  .guard-box li { margin:2px 0; }
+  .guard-box a { color:var(--navy); text-decoration:underline; cursor:pointer; }
+  .guard-box ul.gs-list { list-style:none; margin:8px 0 0; padding:0; }
+  .gs-list li { display:flex; justify-content:space-between; gap:12px; padding:6px 0; border-bottom:1px solid rgba(0,0,0,0.08); }
+  .gs-list li:last-child { border-bottom:0; }
+  .gs-ok { color:#1F7A4D; font-weight:600; }
+  .gs-todo { color:var(--orange); }
+  .gs-note { margin:8px 0 0; font-size:13px; color:var(--muted); }
+  .btn:disabled { opacity:0.45; cursor:not-allowed; }
+  #printView { display:none; }
+  @page { margin: 0.6in; }
+  @media print {
+    body { background:#fff !important; font-size:11pt; }
+    .masthead, .page-wrap, .mobile-pin { display:none !important; }
+    #printView { display:block !important; font-family:'IBM Plex Sans', Arial, sans-serif; color:#1C2126; }
+    #printView h1 { font-family:'Space Grotesk', Arial, sans-serif; font-size:20pt; color:#0B1F3A; margin:0 0 4px; }
+    .pv-meta { font-size:11pt; margin-bottom:12px; }
+    .pv-sec { margin-bottom:12px; border:1px solid #999; padding:8px 10px; }
+    .pv-sec h4 { margin:0 0 6px; font-size:12pt; color:#0B1F3A; }
+    .pv-q { font-size:10.5pt; margin:6px 0 3px; break-inside:avoid; break-after:avoid; page-break-after:avoid; }
+    .pv-sec h4 { break-after:avoid; page-break-after:avoid; }
+    .pv-r { font-size:10.5pt; margin:0 0 6px; padding:6px 8px; border:1px solid #bbb; white-space:pre-wrap; break-inside:avoid; }
+    .pv-r.pv-empty { color:#777; font-style:italic; }
+    .pv-attest { margin-top:14px; font-size:11pt; border-top:2px solid #000; padding-top:8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="masthead-inner">
+    <span class="eyebrow">TGE 1150 &middot; Research Proposal</span>
+    <h1>The Rhetorical Situation Profile</h1>
+    <p>Complete every step below, then download your PDF to submit for the Week 1 assignment. Every response has a minimum word count, and your PDF is available once every step is complete.</p>
+  </div>
+</div>
+
+<div class="page-wrap">
+      <h2>Rhetorical Situation Profile</h2>
+      <p class="sub">TGE 1150 &middot; Instructor: Phil Jones</p>
+
+      <div class="step" style="border-left: 5px solid var(--orange);">
+        <div class="step-head"><span class="step-num" style="background:var(--orange);">READ FIRST</span><h2>Do a Good Job With This</h2></div>
+        <p class="step-prompt">Put real effort into this one. Here's why.</p>
+        <p class="step-prompt">This profile is the foundation for your whole research proposal. Over these three weeks you will build your proposal one piece at a time, and every piece builds on what you put in here. What actually matters is the process you go through to get there, step by step. You will dig up documents, track down real sources, and do the research yourself. If you skip the process and just try to get to a finished paper, you skip the part that was supposed to teach you anything.</p>
+        <p class="step-prompt">This Rhetorical Situation Profile is one of the first steps in that process, and everything after it depends on it. If you don't do this well, the rest of it just sucks. It won't have the real context you need to build an actual scenario, because you won't have actually thought through who you're trying to convince.</p>
+        <p class="step-prompt">Convincing someone isn't just handing them data. That's not how people actually work. You need the human element too: what's their point of view, what's their paradigm, why would they specifically care about this. That's why you have to pick a real, specific person instead of a made up "supervisor." If you don't know who that person actually is, you can't figure out how to convince them.</p>
+        <p class="step-prompt">So take this seriously and fill it out for real. What you put in here is what everything after it gets built on.</p>
+        <p class="step-prompt">One more thing. Nothing in this process hands you finished answers. The workbooks give you structure and keep you organized, but finding and reading the actual material is on you. Your instructor will read what you wrote, so write it like it matters.</p>
+        <p class="step-prompt"><b>Put in real work.</b> Every response box has a minimum word count, shown under the box. One-line answers will not count as complete. Write full, specific sentences in your own words.</p>
+        <p class="step-prompt"><b>Confused at any step?</b> Each step below has a "Stuck?" note that points to the matching lettered section (A to H) of the Reading Workbook you already completed, so you can go straight to it and reread it.</p>
+        <p class="step-prompt"><b>Details are everything here.</b> Every step below has a "Doing This Well" box. Read it before you write. Specific names, numbers, dates, and moments are what separate a profile that works from one that does not.</p>
+        <div class="save-notice">
+          <div class="save-title">Need to stop and come back later? Save your progress file.</div>
+          <p>This page does not remember what you typed. If you close it or refresh it, your answers are gone. Before you leave, click <b>Save Progress File</b> to download a small file to your computer. When you come back, open this page again, click <b>Resume From a Saved File</b>, and pick that file. Everything you typed will load back in. Keep that file somewhere you can find it.</p>
+          <div class="copy-row" style="margin-top:10px;">
+            <button class="btn" onclick="generateJSON()">Save Progress File</button>
+            <button class="btn secondary" onclick="document.getElementById('json-upload').click()">Resume From a Saved File</button>
+          </div>
+        </div>
+      </div>
+
+<div class="mobile-pin" id="mobile-pin">
+  <div class="mobile-pin-row">
+    <div class="mobile-pin-block">
+      <span class="mobile-pin-tag">Author</span>
+      <span class="mobile-pin-name" id="pin-a-name">Not entered</span>
+    </div>
+    <div class="mobile-pin-divider"></div>
+    <div class="mobile-pin-block">
+      <span class="mobile-pin-tag">Supervisor</span>
+      <span class="mobile-pin-name" id="pin-d-name">Not entered</span>
+    </div>
+    <div class="mobile-pin-block" id="pin-paradigm-wrap" style="display:none;">
+      <span class="mobile-pin-chip" id="pin-paradigm"></span>
+    </div>
+    <div class="mobile-pin-block" id="pin-bias-wrap" style="display:none;">
+      <span class="mobile-pin-chip" id="pin-bias"></span>
+    </div>
+  </div>
+</div>
+
+<div class="rs-grid">
+  <div class="main-col">
+
+    <!-- STEP 1: AUTHOR -->
+    <div class="step">
+      <div class="step-head"><span class="step-num">STEP 1</span><h2>Your Role <span class="academic">(Author)</span></h2></div>
+      <p class="step-prompt">Who are you as the person making this case? A vague answer here makes everything after it harder to trust, so this section gets built with the same specificity as your supervisor's.</p>
+      <div class="doing-well">
+        <div class="dw-title">Doing This Well</div>
+        <p class="dw-note">Details are what make this section work. A vague role gives your supervisor no reason to take you seriously.</p>
+        <ul>
+          <li>Name something you actually do, not just a title. "I work in the shop" tells nobody anything. "I run alignments on about ten vehicles a week" does.</li>
+          <li>Use numbers wherever you can: how many, how often, how long.</li>
+          <li>Say what you see that other people don't because of your role. That is your standing to bring this forward.</li>
+          <li>Include a real piece of your background that shapes how you show up at work.</li>
+        </ul>
+      </div>
+      <div class="feeds"><b>Where this goes:</b> this doesn't get its own section. It shapes how credible you sound and what you decide to include in the whole paper.</div>
+      <div class="stuck"><b>Stuck?</b> Go back to the Reading Workbook, <b>Section B: "Your Role: why should they listen to you?"</b>. It shows Dani's first draft and revision side by side.</div>
+
+      <label for="student-name">Your name and who you are</label>
+      <p class="step-prompt" style="margin-top:-4px;">Name yourself, then briefly say who you are as a person, cultural identity, background, whatever actually shapes how you show up in this workplace.</p>
+      <textarea id="student-name" style="min-height:90px;" placeholder="e.g. Jordan Casey. I'm the first person in my family to work in a trade. I grew up in my dad's two-bay repair shop sweeping floors and handing him wrenches, and that's a big reason I'm studying automotive technology now."></textarea>
+
+      <label for="job-title">Job title and how long you've held it</label>
+      <p class="step-prompt" style="margin-top:-4px;">Do not just write a title. Explain it: what your title is, where you work or study, how long you have held it, how you got into it, and what the job actually involves day to day. (~40 words)</p>
+      <textarea id="job-title" style="min-height:90px;" placeholder="e.g. Lead Alignment Technician at Summit Auto for the last three years. I started as a lube tech, moved to brake work after about a year, and now I run alignments and train new hires on the lift."></textarea>
+
+      <div class="sub-block">
+        <div class="sub-label">Your role</div>
+        <label for="role-combined">Who are you in this workplace, and why are you the one bringing this forward? (~75 words)</label>
+        <textarea id="role-combined" placeholder="e.g. I run alignments and brake jobs on about ten vehicles a week, and I'm the tech who does the diagnostics most people skip, like checking tie rod play before every alignment. I also keep the bay log, so I'm the one who sees exactly how many cars are waiting on the lift and for how long. That's why I'm the one bringing this forward."></textarea>
+      </div>
+
+      <div class="callout"><b>Coach's Corner:</b> Don't just say "employee." Say what you actually do, that's what gives you standing to make this ask.</div>
+    </div>
+
+    <!-- STEP 2: SUPERVISOR -->
+    <div class="step">
+      <div class="step-head"><span class="step-num">STEP 2</span><h2>Your Supervisor <span class="academic">(Audience)</span></h2></div>
+      <p class="step-prompt">Your supervisor cannot be invented. Pick a real person you actually know, a parent, a former or current manager, a coach, a teacher, and imagine them as your future boss in the field you're going into. You need to know them well enough to answer honestly, not guess.</p>
+      <div class="doing-well">
+        <div class="dw-title">Doing This Well</div>
+        <p class="dw-note">Details are what make this section work. If a stranger could not tell who this person is from what you wrote, it is not detailed enough.</p>
+        <ul>
+          <li>Pick a real person you know well and write an actual memory: where you were, what they did, and what they said.</li>
+          <li>Include something they really said, in their words or close to it.</li>
+          <li>Tie your paradigm and bias explanations to one specific moment you saw. "She cares about safety" is thin. "She held up three jobs because a lift was leaking fluid" is detailed.</li>
+          <li>Connect their generation or background back to the memory you described, so it reads as one person, not a list of labels.</li>
+          <li>Say what they would ask first if you pitched them something, because that tells you what they care about most.</li>
+        </ul>
+      </div>
+      <div class="feeds"><b>Where this goes:</b> this doesn't get its own section. It shapes how the whole paper is written and what you decide to include, because you are writing it to convince this person.</div>
+      <div class="stuck"><b>Stuck?</b> Go back to the Reading Workbook, <b>Section C: "Your Supervisor: pick a real person"</b> and <b>Section D: "Your Supervisor: how they see work and where they lean"</b>. They explain paradigm, bias, and identity with examples.</div>
+
+      <label for="sup-combined">Who they are and the moment you remember</label>
+      <p class="step-prompt" style="margin-top:-4px;">Name them, how you know them, and one specific moment or interaction that shows who they are. Write it like a memory, not a description. (~90 words)</p>
+      <textarea id="sup-combined" placeholder="e.g. Dana Reyes, the shop foreman I've worked under for two years at Summit Auto. During my first month, I torqued a lug pattern wrong and she caught it before the car left the bay. She didn't write me up. She walked me back to the wheel, had me redo all five lugs with the torque wrench while she watched, and said, 'Slow is fine. Wrong comes back.' I've never forgotten it."></textarea>
+      <div class="callout"><b>Coach's Corner:</b> If you can't remember a real moment with this person, you haven't picked someone you know well enough yet.</div>
+
+      <label for="paradigm">Their paradigm <span class="academic">(ties to Module 1)</span></label>
+      <select id="paradigm">
+        <option value="">Select a paradigm...</option>
+        <option value="Culture of Production" data-def="The workplace values getting output out the door above almost everything else. Speed, volume, and deadlines drive decisions, and slowing down for any reason has to be justified." data-q="Have you ever seen this person push to get something done fast, even if it meant cutting a corner? What happened?">Culture of Production</option>
+        <option value="Culture of Safety" data-def="The workplace treats preventing harm as the top priority. People are expected to stop work, speak up, and slow things down when something looks risky." data-q="Have you ever seen this person stop something, or refuse to move forward, because it felt risky? What did they say or do?">Culture of Safety</option>
+        <option value="Normalization of Deviance" data-def="A shortcut or rule-bend that was once questioned slowly becomes 'just how we do it' because nothing bad has happened yet. Over time, people stop seeing it as a risk." data-q="Is there a shortcut or workaround this person treats as normal now, that probably wasn't the original way of doing things? How did that become normal?">Normalization of Deviance</option>
+        <option value="Structural Secrecy" data-def="Information gets lost, filtered, or never reaches the people who need it because of how the organization is set up, such as layers of management or separate departments." data-q="Has this person ever been surprised by a problem that 'should have' reached them sooner? Why didn't it?">Structural Secrecy</option>
+        <option value="Culture of Compliance" data-def="Decisions are driven by rules, policies, and regulations. The first question is 'what does the policy say' before 'is this a good idea.'" data-q="Does this person default to 'what's the rule' or 'what's the policy' before making a judgment call? Give an example.">Culture of Compliance</option>
+        <option value="Culture of Cost-Containment" data-def="Money is the main lens. Spending is watched closely, and every request has to prove it saves or earns more than it costs." data-q="Have you heard this person talk about money or budget more than almost anything else when making a decision? What's an example?">Culture of Cost-Containment</option>
+        <option value="Just Culture / Learning Culture" data-def="Mistakes are treated as a chance to learn and fix the system, not just a reason to punish someone. People are encouraged to report problems honestly." data-q="Has this person ever responded to a mistake, yours or someone else's, by treating it as something to learn from rather than something to punish? What happened?">Just Culture / Learning Culture</option>
+        <option value="Command Culture" data-def="Authority and chain of command drive decisions. Who approved something, and who ranks above whom, matters as much as whether the idea is good." data-q="Does this person care more about who approved something than whether the idea itself is good? Have you seen that play out?">Command Culture</option>
+      </select>
+      <div class="diagnostic" id="paradigm-def"><b>What this means:</b> <span id="paradigm-def-text"></span></div>
+      <div class="diagnostic" id="paradigm-q"><b>Ask yourself:</b> <span id="paradigm-q-text"></span></div>
+      <label for="paradigm-why">Why this paradigm matches them</label>
+      <textarea id="paradigm-why" placeholder="e.g. Last spring she held up three jobs in a row because one lift was weeping fluid, even though we were already two cars behind and a customer was waiting at the counter. She told me the schedule could slip but a lift failure could not. That's her putting safety ahead of production, every time."></textarea>
+
+      <label for="bias">Their possible bias <span class="academic">(ties to Module 2)</span></label>
+      <select id="bias">
+        <option value="">Select a bias...</option>
+        <option value="Confirmation Bias" data-def="Favoring information that matches what you already believe and brushing off anything that contradicts it." data-q="Does this person tend to favor information or opinions that confirm what they already believed going in? Have you seen them dismiss something just because it contradicted their existing view?">Confirmation Bias</option>
+        <option value="Status Quo Bias" data-def="Preferring to keep things the way they are because change feels risky or like extra work, even when a better option exists." data-q="Does this person resist changing something just because 'it's always been done this way'? What's an example of them sticking with the familiar option even when a better one existed?">Status Quo Bias</option>
+        <option value="Authority Bias" data-def="Giving more weight to an idea because of who said it (their title, rank, or experience) than because of the reasoning behind it." data-q="Does this person give more weight to an idea depending on who suggested it, rather than the idea itself? Have you seen them favor a suggestion because of someone's title or experience, not the reasoning?">Authority Bias</option>
+        <option value="Sunk Cost Bias" data-def="Sticking with something because of the time or money already put into it, even when it clearly is not working." data-q="Does this person struggle to walk away from something they've already invested time or money into, even when it's clearly not working? What's an example?">Sunk Cost Bias</option>
+        <option value="Risk Aversion Bias" data-def="Choosing the familiar or 'safe' option over a better one because the unknown feels too uncertain." data-q="Does this person avoid a good option just because it feels unfamiliar or uncertain, even when the potential upside is real? Have you seen them choose 'safe' over 'better'?">Risk Aversion Bias</option>
+        <option value="Halo Effect" data-def="Assuming something is good overall because one part impressed you, like a brand name, a polished presentation, or a person you like." data-q="Does this person assume something is good overall because one part of it impressed them, a brand name, a slick presentation, a person they liked? What's an example?">Halo Effect</option>
+        <option value="Anchoring Bias" data-def="Getting stuck on the first number or piece of information you hear and judging everything after it against that first impression." data-q="Does this person get stuck on the first number, price, or piece of information they hear, and judge everything after against that first impression? Have you seen that happen?">Anchoring Bias</option>
+        <option value="Availability Bias" data-def="Judging how common or serious a problem is by how recently or vividly you experienced it, instead of by the actual data." data-q="Does this person judge how common or serious a problem is based on how recently or vividly they experienced it, rather than the actual data? What's an example?">Availability Bias</option>
+        <option value="Optimism Bias" data-def="Assuming things will turn out fine and underestimating how likely it is that something goes wrong." data-q="Does this person tend to assume things will work out fine, underestimating real risks or the odds of something going wrong? Have you seen that play out?">Optimism Bias</option>
+      </select>
+      <div class="diagnostic" id="bias-def"><b>What this means:</b> <span id="bias-def-text"></span></div>
+      <div class="diagnostic" id="bias-q"><b>Ask yourself:</b> <span id="bias-q-text"></span></div>
+      <label for="bias-why">Why this bias matches them</label>
+      <textarea id="bias-why" placeholder="e.g. She has used the same brand of diagnostic scanner for fifteen years. Two techs have shown her newer scanners that read ADAS codes faster, and both times she said, 'Mine works fine.' She has never opened a demo unit. That's her sticking with the familiar tool even when a better one is sitting right in front of her."></textarea>
+
+      <label for="identity">Their generational or cultural identity <span class="academic">(ties to Module 3)</span></label>
+      <p class="step-prompt" style="margin-top:-4px;">Name their generation or cultural background, and connect it to the memory you described above.</p>
+      <textarea id="identity" placeholder="e.g. She's Gen X, and she came up in shops where you learned by watching and then redoing the work yourself. That matches the lug nut moment: she corrected me by making me fix it, not by lecturing me. She tells every new tech that a shortcut that comes back on a customer costs more than the time it saved."></textarea>
+
+      <label for="sup-priority">What matters most to them</label>
+      <textarea id="sup-priority" placeholder="e.g. Getting it right the first time, always. She would rather a car sit an extra day than come back with the same problem, because a comeback costs her the customer and the shop's reputation. Whenever I pitch her anything, her first question is, 'Does this cut comebacks?'"></textarea>
+    </div>
+
+    <!-- STEP 3: PROBLEM AND ASK -->
+    <div class="step">
+      <div class="step-head"><span class="step-num">STEP 3</span><h2>The Problem and the Ask <span class="academic">(Purpose and Exigence)</span></h2></div>
+      <p class="step-prompt">This section asks for a specific incident, a specific cost, and one clear sentence stating what you want. Vague versions of any of these are easy to write and easy to dismiss.</p>
+      <div class="doing-well">
+        <div class="dw-title">Doing This Well</div>
+        <p class="dw-note">Details are what make this section work. Vague problems get vague answers, and vague answers get a no.</p>
+        <ul>
+          <li>Describe one specific incident: when it happened, what happened, and who or what it affected.</li>
+          <li>Put numbers on it: hours waited, jobs turned away, dollars lost, vehicles backed up.</li>
+          <li>In the cost of doing nothing, say what gets worse and roughly when. "It keeps being a problem" does not count.</li>
+          <li>Make your ask name the exact item. After one read, your supervisor should know what to approve.</li>
+        </ul>
+      </div>
+      <div class="feeds"><b>Where this goes:</b> this becomes the start of the Introduction in your final paper: the problem you're solving and why it matters.</div>
+      <div class="stuck"><b>Stuck?</b> Go back to the Reading Workbook, <b>Section E: "The Problem and the Ask"</b>. It shows how to turn a vague problem into one real incident with numbers.</div>
+
+      <div class="sub-block">
+        <div class="sub-label">The problem, with the incident that proves it</div>
+        <label for="problem-combined">Describe the last time this actually happened, and what it reveals about the real problem. (~100 words)</label>
+        <textarea id="problem-combined" placeholder="e.g. Last month, three vehicles backed up on a Thursday because only one lift in the shop can do alignments. One customer's truck sat overnight, and we had to call him twice to push back his pickup time. We run six bays but only have one alignment-capable lift, so cars regularly wait four to five hours for a job that takes under one hour. That wait is the real problem."></textarea>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-label">Cost of doing nothing</div>
+        <label for="cost-nothing">If nothing changes, what happens over the next few months?</label>
+        <textarea id="cost-nothing" placeholder="e.g. Wait times keep climbing as we take on more customers. By next quarter we expect about 15 more alignment jobs a month, which the single lift can't absorb, so we start turning work away. Customers we turn away go to the shop down the road, and we lose the repeat business that comes with them."></textarea>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-label">The ask</div>
+        <label for="one-ask">State exactly what you want approved. A couple of sentences, no hedging.</label>
+        <textarea id="one-ask" maxlength="300" class="locked-input" style="min-height:90px;" placeholder="e.g. Approve the purchase of a second alignment lift for Bay 4. It would let us run alignments and standard bay work in parallel instead of queuing everything behind one lift."></textarea>
+      </div>
+
+      <div class="callout"><b>Coach's Corner:</b> Vague problems get vague approvals. "Our equipment is old" won't cut it, name what it's costing you in time, safety, or quality.</div>
+    </div>
+
+    <!-- STEP 4: CONTEXT -->
+    <div class="step">
+      <div class="step-head"><span class="step-num">STEP 4</span><h2>The Situation on the Ground <span class="academic">(Context)</span></h2></div>
+      <p class="step-prompt">Three quick questions about the circumstances around this request. Either a yes or a no can be true here, but explain your answer either way.</p>
+      <div class="doing-well">
+        <div class="dw-title">Doing This Well</div>
+        <p class="dw-note">Details are what make this section work. A yes or a no is only the start. The explanation is what counts.</p>
+        <ul>
+          <li>Back up every answer with facts: dates, dollar amounts, names of past purchases, deadlines.</li>
+          <li>A "no" is a perfectly good answer, but explain it with real facts about your own workplace, school, or team.</li>
+          <li>Test each answer: could it apply to any workplace? If so, rewrite it until it could only be about yours.</li>
+        </ul>
+      </div>
+      <div class="feeds"><b>Where this goes:</b> this feeds the Introduction and your final recommendation, because it explains why your request matters now and whether the timing works.</div>
+      <div class="stuck"><b>Stuck?</b> Go back to the Reading Workbook, <b>Section F: "The Situation on the Ground"</b>. It shows how Dani answered all three questions.</div>
+
+      <div class="sub-block">
+        <div class="sub-label">Budget cycle</div>
+        <label style="margin-top:0;">Is there a known budget window or funding cycle that affects this request?</label>
+        <div class="toggle-row">
+          <div class="toggle-opt"><input type="radio" name="budget-toggle" id="budget-yes" value="yes"><label class="toggle-label" for="budget-yes">Yes</label></div>
+          <div class="toggle-opt"><input type="radio" name="budget-toggle" id="budget-no" value="no"><label class="toggle-label" for="budget-no">No</label></div>
+        </div>
+        <div class="toggle-followup" id="budget-followup">
+          <textarea id="budget-explain" placeholder=""></textarea>
+        </div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-label">Timing pressure</div>
+        <label style="margin-top:0;">Is there a deadline or scheduling reason this needs to happen soon?</label>
+        <div class="toggle-row">
+          <div class="toggle-opt"><input type="radio" name="timing-toggle" id="timing-yes" value="yes"><label class="toggle-label" for="timing-yes">Yes</label></div>
+          <div class="toggle-opt"><input type="radio" name="timing-toggle" id="timing-no" value="no"><label class="toggle-label" for="timing-no">No</label></div>
+        </div>
+        <div class="toggle-followup" id="timing-followup">
+          <textarea id="timing-explain" placeholder=""></textarea>
+        </div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-label">Precedent</div>
+        <label style="margin-top:0;">Has a similar purchase happened before at your workplace, or at a comparable one?</label>
+        <div class="toggle-row">
+          <div class="toggle-opt"><input type="radio" name="precedent-toggle" id="precedent-yes" value="yes"><label class="toggle-label" for="precedent-yes">Yes</label></div>
+          <div class="toggle-opt"><input type="radio" name="precedent-toggle" id="precedent-no" value="no"><label class="toggle-label" for="precedent-no">No</label></div>
+        </div>
+        <div class="toggle-followup" id="precedent-followup">
+          <textarea id="precedent-explain" placeholder=""></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 5: EQUIPMENT -->
+    <div class="step">
+      <div class="step-head"><span class="step-num">STEP 5</span><h2>The Equipment or Tool <span class="academic">(Content)</span></h2></div>
+      <p class="step-prompt">Lay out what you currently have next to what you're proposing, then explain why each feature you list actually matters to the problem you described in Step 3.</p>
+      <div class="doing-well">
+        <div class="dw-title">Doing This Well</div>
+        <p class="dw-note">Details are what make this section work. If your supervisor cannot picture the equipment, they cannot approve it.</p>
+        <ul>
+          <li>Name the actual item, with brand and model if you know it, and describe what you have now in measurable terms: how many, and how often it is booked.</li>
+          <li>Make each feature a real spec or capability. "Better" and "newer" are not features.</li>
+          <li>Tie each "why it matters" back to the exact problem you described in Step 3, using the same details.</li>
+        </ul>
+      </div>
+      <div class="feeds"><b>Where this goes:</b> this is the product you will research in Week 2. What you learn about it ends up in the Review of Literature and the Methodology.</div>
+      <div class="stuck"><b>Stuck?</b> Go back to the Reading Workbook, <b>Section G: "The Equipment or Tool"</b>. It explains what counts as a real feature and how to tie it to your problem.</div>
+
+      <div class="sub-block">
+        <div class="sub-label">Current setup vs. what you're proposing</div>
+        <label for="equipment-combined">What do you have now, and what are you proposing instead? (~75 words)</label>
+        <textarea id="equipment-combined" placeholder="e.g. Right now we have one alignment lift shared across six bays, and it's booked solid most days. I'm proposing a second alignment lift that matches our current bay specs, so alignments stop blocking brake and suspension work. Bay 4 already has the floor space and the electrical hookup."></textarea>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-label">Features, tied to your problem</div>
+        <div class="feature-row">
+          <div><span class="feature-tag">Feature 1</span><input type="text" id="feat1" placeholder="e.g. Faster setup time"></div>
+          <div><span class="feature-tag">Why it matters to my problem</span><textarea id="feat1-why" style="min-height:80px;" placeholder="e.g. Cuts the wait per vehicle roughly in half, which directly attacks the four to five hour backlog I described in Step 3."></textarea></div>
+        </div>
+        <div class="feature-row">
+          <div><span class="feature-tag">Feature 2</span><input type="text" id="feat2" placeholder="e.g. Digital calibration"></div>
+          <div><span class="feature-tag">Why it matters to my problem</span><textarea id="feat2-why" style="min-height:80px;" placeholder="e.g. Reduces comeback risk on ADAS-equipped vehicles, which matters because Dana's first question is always whether it cuts comebacks."></textarea></div>
+        </div>
+      </div>
+
+      <div class="callout"><b>Coach's Corner:</b> Pick features you can defend with data. Every feature you list here, expect a question about it later.</div>
+    </div>
+
+    <!-- STEP 6: RULES -->
+    <div class="step">
+      <div class="step-head"><span class="step-num">STEP 6</span><h2>The Rules of the Proposal <span class="academic">(Genre and Constraints)</span></h2></div>
+      <p class="step-prompt">This section is pre-filled for TGE 1150.</p>
+<div class="stuck"><b>Stuck?</b> Go back to the Reading Workbook, <b>Section H: "The Rules of the Proposal (Genre and Constraints)"</b> if any of this is unclear.</div>
+
+      <ul class="rules-list">
+        <li>Plain, direct, and professional. Write the way you would explain this to your supervisor in person: clear, specific, and no fancy words.</li>
+        <li>Required structure: Introduction, Review of Literature, Methodology, Conclusion, References.</li>
+        <li>Around 3 to 4 pages. Due before your final defense meeting.</li>
+      </ul>
+      <p class="step-prompt" style="margin-top:18px;">Over the next three weeks you will build your proposal one piece at a time. At the end, those pieces get put together into one paper in this order. You don't need to memorize it. Just know where what you're doing now ends up.</p>
+      <div class="conclusion-banner">
+        <div class="cb-big">The Conclusion is written by YOU, not by AI.</div>
+        <div class="cb-small">Every other section gets assembled from the pieces you build. Your Conclusion is the one you write yourself, in your own words.</div>
+      </div>
+      <ul class="roadmap">
+        <li>
+          <div class="rm-head"><span class="rm-name">Introduction</span><span class="rm-week">Weeks 1 and 2</span></div>
+          <p class="rm-what">The problem you're solving, why it matters, what you expect to find, and the kind of research you'll do.</p>
+          <p class="rm-from"><b>Where it comes from:</b> your problem and ask from this worksheet start it. In Week 2 you add your research question and what you expect to find.</p>
+        </li>
+        <li>
+          <div class="rm-head"><span class="rm-name">Review of Literature</span><span class="rm-week">Week 2</span></div>
+          <p class="rm-what">The idea that explains your problem, how you picked your sources, and what you found about who is affected, the workplace principle behind it, and where it happens.</p>
+          <p class="rm-from"><b>Where it comes from:</b> the research you do in Week 2.</p>
+        </li>
+        <li>
+          <div class="rm-head"><span class="rm-name">Methodology</span><span class="rm-week">Week 3</span></div>
+          <p class="rm-what">How you gathered your evidence, what could have skewed it, and whether it applies beyond your own workplace.</p>
+          <p class="rm-from"><b>Where it comes from:</b> your answers in Week 3.</p>
+        </li>
+        <li class="rm-student">
+          <div class="rm-head"><span class="rm-name">Conclusion</span><span class="rm-week">Week 3</span></div>
+          <div class="rm-bigwarn">YOU WRITE THIS ONE. NOT AI.</div>
+          <p class="rm-what">Did the evidence back up what you expected? Say it in your own words, based on what you found.</p>
+          <p class="rm-from"><b>Where it comes from:</b> your own thinking. AI does not write, edit, or touch your conclusion.</p>
+        </li>
+        <li>
+          <div class="rm-head"><span class="rm-name">References</span><span class="rm-week">Built as you go</span></div>
+          <p class="rm-what">Every source you used, with a working link.</p>
+          <p class="rm-from"><b>Where it comes from:</b> the sources you record in Weeks 2 and 3.</p>
+        </li>
+      </ul>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="step">
+      <div class="step-head"><span class="step-num">FINAL</span><h2>Your Summary</h2></div>
+      <p class="step-prompt">When everything above is complete, download your PDF and submit that file for the Week 1 assignment.</p>
+      <div class="guard-box" id="guard-status"></div>
+      <div class="copy-row">
+        <button class="btn" id="pdf-btn" style="background:var(--navy);" onclick="generatePDF()" disabled>Download PDF</button>
+      </div>
+      <p style="font-size:12.5px; color:var(--muted); margin-top:10px;">The PDF button opens your browser's print window. Choose "Save as PDF" as the destination, then submit that file for the Week 1 assignment. Chrome works best.</p>
+      <div class="copy-row" style="margin-top:14px;">
+        <button class="btn secondary" onclick="generateJSON()">Save Progress File</button>
+        <button class="btn secondary" onclick="document.getElementById('json-upload').click()">Resume From a Saved File</button>
+        <input type="file" id="json-upload" accept=".json" style="display:none;" onchange="loadJSON(event)">
+      </div>
+      <p style="font-size:12.5px; color:var(--muted); margin-top:6px;">This one is not your submission. If you need to stop partway through, click "Save Progress File" to download everything you've entered so far. When you come back, click "Resume From a Saved File" and pick that file to load your answers back in.</p>
+    </div>
+
+  </div>
+
+  <div class="side-col">
+
+    <div class="rs-card small">
+      <div class="ribbon">AUTHOR ID</div>
+      <h3>Author Badge</h3>
+      <div class="card-name" id="a-name">Not entered</div>
+      <div class="card-role" id="a-jobtitle" style="font-style:italic;"></div>
+      <div class="card-role" id="a-task"></div>
+    </div>
+
+    <div class="rs-card">
+      <div class="ribbon">SUPERVISOR FILE</div>
+      <h3>Supervisor Dossier</h3>
+      <div class="card-name" id="d-name">Not entered</div>
+      <div class="card-role" id="d-priority"></div>
+
+      <div class="card-field">
+        <div class="card-label">Paradigm</div>
+        <div class="card-value" id="d-paradigm"><span class="card-empty">not yet selected</span></div>
+      </div>
+      <div class="card-field">
+        <div class="card-label">Bias</div>
+        <div class="card-value" id="d-bias"><span class="card-empty">not yet selected</span></div>
+      </div>
+      <div class="card-field">
+        <div class="card-label">Identity</div>
+        <div class="card-value" id="d-identity"><span class="card-empty">not yet written</span></div>
+      </div>
+      <div class="card-progress" id="d-progress">0 / 4 fields complete</div>
+    </div>
+
+    <div class="rs-card small">
+      <div class="ribbon">SPEC CHECK</div>
+      <h3>Equipment Snapshot</h3>
+      <div class="card-field">
+        <div class="card-label">Proposed</div>
+        <div class="card-value" id="c-proposed"><span class="card-empty">not yet written</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<p class="footer-note">TGE 1150 &middot; College of Technology, Idaho State University &middot; Instructor: Phil Jones</p>
+
+</div>
+
+<div id="printView"></div>
+
+<script>
+  const paradigmSelect = document.getElementById('paradigm');
+  const biasSelect = document.getElementById('bias');
+
+  paradigmSelect.addEventListener('change', () => {
+    const opt = paradigmSelect.options[paradigmSelect.selectedIndex];
+    const q = opt.getAttribute('data-q');
+    const box = document.getElementById('paradigm-q');
+    const defBox = document.getElementById('paradigm-def');
+    const defText = opt.getAttribute('data-def');
+    if (defText) { document.getElementById('paradigm-def-text').textContent = defText; defBox.classList.add('show'); } else { defBox.classList.remove('show'); }
+    if (q) {
+      document.getElementById('paradigm-q-text').textContent = q;
+      box.classList.add('show');
+    } else {
+      box.classList.remove('show');
+    }
+    updateCards();
+    updateSummary();
+  });
+
+  biasSelect.addEventListener('change', () => {
+    const opt = biasSelect.options[biasSelect.selectedIndex];
+    const q = opt.getAttribute('data-q');
+    const box = document.getElementById('bias-q');
+    const defBox = document.getElementById('bias-def');
+    const defText = opt.getAttribute('data-def');
+    if (defText) { document.getElementById('bias-def-text').textContent = defText; defBox.classList.add('show'); } else { defBox.classList.remove('show'); }
+    if (q) {
+      document.getElementById('bias-q-text').textContent = q;
+      box.classList.add('show');
+    } else {
+      box.classList.remove('show');
+    }
+    updateCards();
+    updateSummary();
+  });
+
+  // Yes/No toggles with contextual follow-up prompts
+  const toggleConfig = [
+    { name: 'budget-toggle', followup: 'budget-followup', textarea: 'budget-explain',
+      yesPrompt: 'e.g. Equipment requests have to be submitted before the spring budget locks in March. After that, anything over $5,000 waits until the next fiscal year, so a request in April would not get funded until next summer.',
+      noPrompt: 'e.g. Our shop budget isn\'t tied to one cycle. Dana approves purchases as needed, and she has okayed equipment requests in both October and February, so this can go in anytime.' },
+    { name: 'timing-toggle', followup: 'timing-followup', textarea: 'timing-explain',
+      yesPrompt: 'e.g. We\'re taking on a fleet contract in January that adds about 15 alignment jobs a month. The single lift can\'t handle that volume, so the new lift needs to be in place by December.',
+      noPrompt: 'e.g. This isn\'t urgent. The current setup works, it is just slower than it should be, so the upgrade improves turnaround going forward instead of fixing an emergency.' },
+    { name: 'precedent-toggle', followup: 'precedent-followup', textarea: 'precedent-explain',
+      yesPrompt: 'e.g. Last year Bay 2 got a new tire machine approved through a similar request. Dana said yes after seeing how many tire jobs we were turning away, so there is a track record of equipment asks backed by numbers.',
+      noPrompt: 'e.g. As far as I know, our shop hasn\'t asked for a big equipment purchase like this before. The closest thing was a smaller tool upgrade two years ago, so I will have to make the case from scratch.' },
+  ];
+  toggleConfig.forEach(cfg => {
+    document.getElementsByName(cfg.name).forEach(radio => {
+      radio.addEventListener('change', () => {
+        const followup = document.getElementById(cfg.followup);
+        const textarea = document.getElementById(cfg.textarea);
+        followup.classList.add('show');
+        textarea.placeholder = radio.value === 'yes' ? cfg.yesPrompt : cfg.noPrompt;
+        fitPlaceholder(textarea);
+        updateSummary();
+      });
+    });
+  });
+
+  // The ask field still updates cards and summary on input, just no visible counter
+  const oneAsk = document.getElementById('one-ask');
+  oneAsk.addEventListener('input', () => {
+    updateCards();
+    updateSummary();
+  });
+
+  const fieldIds = [
+    'student-name','job-title','role-combined',
+    'sup-combined','paradigm-why','bias-why','identity','sup-priority',
+    'problem-combined','cost-nothing',
+    'budget-explain','timing-explain','precedent-explain',
+    'equipment-combined','feat1','feat1-why','feat2','feat2-why'
+  ];
+  fieldIds.forEach(id => {
+    document.getElementById(id).addEventListener('input', () => { updateCards(); updateSummary(); });
+  });
+
+  // First name-like chunk: stops at the first comma, period, semicolon, or line break
+  function shortName(str) { return (str || '').split(/[,.;\n]/)[0].trim(); }
+  function val(id) { return document.getElementById(id).value.trim(); }
+  function truncate(str, n) { return str.length > n ? str.slice(0, n) + '...' : str; }
+
+  function updateCards() {
+    // Author badge
+    const sName = val('student-name');
+    document.getElementById('a-name').textContent = sName ? shortName(sName) : 'Not entered';
+    document.getElementById('a-jobtitle').textContent = truncate(val('job-title'), 60);
+    document.getElementById('a-task').textContent = val('role-combined') ? truncate(val('role-combined'), 60) : '';
+
+    // Supervisor dossier
+    const name = val('sup-combined');
+    document.getElementById('d-name').textContent = name ? shortName(name) : 'Not entered';
+    document.getElementById('d-priority').textContent = val('sup-priority');
+
+    const paradigm = paradigmSelect.value;
+    document.getElementById('d-paradigm').innerHTML = paradigm ? paradigm : '<span class="card-empty">not yet selected</span>';
+
+    const bias = biasSelect.value;
+    document.getElementById('d-bias').innerHTML = bias ? bias : '<span class="card-empty">not yet selected</span>';
+
+    const identity = val('identity');
+    document.getElementById('d-identity').innerHTML = identity ? truncate(identity, 70) : '<span class="card-empty">not yet written</span>';
+
+    let complete = 0;
+    if (name) complete++;
+    if (paradigm) complete++;
+    if (bias) complete++;
+    if (identity) complete++;
+    document.getElementById('d-progress').textContent = complete + ' / 4 fields complete';
+
+    // Equipment snapshot
+    const proposed = val('equipment-combined');
+    document.getElementById('c-proposed').innerHTML = proposed ? truncate(proposed, 60) : '<span class="card-empty">not yet written</span>';
+
+    // Mobile pinned bar
+    document.getElementById('pin-a-name').textContent = sName ? truncate(shortName(sName), 18) : 'Not entered';
+    document.getElementById('pin-d-name').textContent = name ? truncate(shortName(name), 18) : 'Not entered';
+    const pinParadigmWrap = document.getElementById('pin-paradigm-wrap');
+    const pinBiasWrap = document.getElementById('pin-bias-wrap');
+    if (paradigm) {
+      pinParadigmWrap.style.display = 'flex';
+      document.getElementById('pin-paradigm').textContent = paradigm;
+    } else {
+      pinParadigmWrap.style.display = 'none';
+    }
+    if (bias) {
+      pinBiasWrap.style.display = 'flex';
+      document.getElementById('pin-bias').textContent = bias;
+    } else {
+      pinBiasWrap.style.display = 'none';
+    }
+  }
+
+  function toggleVal(name) {
+    const checked = document.querySelector(`input[name="${name}"]:checked`);
+    return checked ? checked.value : null;
+  }
+
+  function updateSummary() {
+    const budget = toggleVal('budget-toggle');
+    const timing = toggleVal('timing-toggle');
+    const precedent = toggleVal('precedent-toggle');
+
+    const lines = [
+`WEEK 1: RHETORICAL SITUATION PROFILE`,
+`TGE 1150 Research Proposal`,
+`Name and who you are: ${val('student-name') || '[not yet written]'}`,
+`Job title and tenure: ${val('job-title') || '[not yet written]'}`,
+``,
+`--- YOUR ROLE (Author) ---`,
+`Your role: ${val('role-combined') || '[not yet written]'}`,
+``,
+`--- YOUR SUPERVISOR (Audience) ---`,
+`Who they are and the moment you remember: ${val('sup-combined') || '[not yet written]'}`,
+`Paradigm: ${paradigmSelect.value || '[not yet selected]'}`,
+`Why it matches: ${val('paradigm-why') || '[not yet written]'}`,
+`Bias: ${biasSelect.value || '[not yet selected]'}`,
+`Why it matches: ${val('bias-why') || '[not yet written]'}`,
+`Generational/Cultural identity: ${val('identity') || '[not yet written]'}`,
+`What matters most to them: ${val('sup-priority') || '[not yet written]'}`,
+``,
+`--- THE PROBLEM AND THE ASK (Purpose and Exigence) ---`,
+`The problem, with the incident that proves it: ${val('problem-combined') || '[not yet written]'}`,
+`Cost of doing nothing: ${val('cost-nothing') || '[not yet written]'}`,
+`The ask: ${val('one-ask') || '[not yet written]'}`,
+``,
+`--- THE SITUATION ON THE GROUND (Context) ---`,
+`Budget cycle: ${budget ? budget.toUpperCase() + ' - ' + (val('budget-explain') || '[not yet written]') : '[not yet answered]'}`,
+`Timing pressure: ${timing ? timing.toUpperCase() + ' - ' + (val('timing-explain') || '[not yet written]') : '[not yet answered]'}`,
+`Precedent: ${precedent ? precedent.toUpperCase() + ' - ' + (val('precedent-explain') || '[not yet written]') : '[not yet answered]'}`,
+``,
+`--- THE EQUIPMENT OR TOOL (Content) ---`,
+`Current setup vs. proposed: ${val('equipment-combined') || '[not yet written]'}`,
+`Feature 1: ${val('feat1') || '[not yet written]'} - ${val('feat1-why') || '[why not yet written]'}`,
+`Feature 2: ${val('feat2') || '[not yet written]'} - ${val('feat2-why') || '[why not yet written]'}`,
+``,
+`--- THE RULES OF THE PROPOSAL (Genre and Constraints) ---`,
+`Plain, direct, and professional. Write the way you would explain this to your supervisor in person: clear, specific, and no fancy words. Structure: Introduction, Review of Literature, Methodology, Conclusion, References. 3 to 4 pages, due before the final defense meeting.`
+    ];
+    updateGuards();
+    const summaryEl = document.getElementById('summary');
+    if (summaryEl) summaryEl.textContent = lines.join('\n');
+  }
+
+  function esc(str) {
+    return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+  function filled(str, placeholder) {
+    return str ? esc(str) : `<span class="empty">${placeholder}</span>`;
+  }
+
+
+  function generatePDF() {
+    if (!guardsOk()) { document.getElementById('guard-status').scrollIntoView({behavior:'smooth', block:'center'}); return; }
+    let nm = shortName(val('student-name'));
+    if (!nm) nm = (prompt("Enter your first and last name for the top of the PDF:", "") || '').trim();
+    const budget = toggleVal('budget-toggle');
+    const timing = toggleVal('timing-toggle');
+    const precedent = toggleVal('precedent-toggle');
+    const box = (label, text) => '<div class="pv-q"><b>' + esc(label) + '</b>' + (text ? ' <span style="color:#555">(' + wc(text) + ' words)</span>' : '') + '</div><div class="pv-r' + (text ? '' : ' pv-empty') + '">' + (text ? esc(text) : 'Not completed') + '</div>';
+    const yn = (v, txt) => v ? v.toUpperCase() + ': ' + (txt || 'Not completed') : '';
+    const sec = (title, inner) => '<div class="pv-sec"><h4>' + esc(title) + '</h4>' + inner + '</div>';
+    const d = new Date().toLocaleDateString();
+    let h = '<h1>Rhetorical Situation Profile</h1><div class="pv-meta">TGE 1150 &middot; Research Proposal &middot; Week 1<br><b>Name:</b> ' + esc(nm || '[Name not entered]') + ' &nbsp; <b>Date:</b> ' + esc(d) + '</div>';
+    h += sec('Step 1: Your Role (Author)',
+      box('Name and who you are', val('student-name')) + box('Job title and how long you have held it', val('job-title')) + box('Your role', val('role-combined')));
+    h += sec('Step 2: Your Supervisor (Audience)',
+      box('Who they are and the moment you remember', val('sup-combined')) +
+      box('Paradigm', paradigmSelect.value) + box('Why this paradigm matches them', val('paradigm-why')) +
+      box('Bias', biasSelect.value) + box('Why this bias matches them', val('bias-why')) +
+      box('Generational or cultural identity', val('identity')) + box('What matters most to them', val('sup-priority')));
+    h += sec('Step 3: The Problem and the Ask (Purpose and Exigence)',
+      box('The problem, with the incident that proves it', val('problem-combined')) + box('Cost of doing nothing', val('cost-nothing')) + box('The ask', val('one-ask')));
+    h += sec('Step 4: The Situation on the Ground (Context)',
+      box('Budget cycle', yn(budget, val('budget-explain'))) + box('Timing pressure', yn(timing, val('timing-explain'))) + box('Precedent', yn(precedent, val('precedent-explain'))));
+    const f1 = val('feat1') ? val('feat1') + (val('feat1-why') ? ' | Why it matters: ' + val('feat1-why') : '') : '';
+    const f2 = val('feat2') ? val('feat2') + (val('feat2-why') ? ' | Why it matters: ' + val('feat2-why') : '') : '';
+    h += sec('Step 5: The Equipment or Tool (Content)',
+      box('Current setup vs. what you are proposing', val('equipment-combined')) + box('Feature 1', f1) + box('Feature 2', f2));
+    h += sec('Step 6: The Rules of the Proposal (Genre and Constraints)',
+      '<div class="pv-q">Plain, direct, and professional. Structure: Introduction, Review of Literature, Methodology, Conclusion, References. Around 3 to 4 pages, due before the final defense meeting. The Conclusion is written by you, not by AI.</div>');
+    h += '<div class="pv-attest">I wrote these responses in my own words. Signed: ' + esc(nm) + '</div>';
+    document.getElementById('printView').innerHTML = h;
+    window.print();
+  }
+
+
+
+  function generateJSON() {
+    const data = {
+      exportType: "TGE 1150 Rhetorical Situation Profile Progress Save",
+      savedAt: new Date().toISOString(),
+      textFields: {},
+      toggles: {}
+    };
+    const textFieldIds = [
+      'student-name','job-title','role-combined',
+      'sup-combined','paradigm-why','bias-why','identity','sup-priority',
+      'problem-combined','cost-nothing','one-ask',
+      'budget-explain','timing-explain','precedent-explain',
+      'equipment-combined','feat1','feat1-why','feat2','feat2-why'
+    ];
+    textFieldIds.forEach(id => { data.textFields[id] = document.getElementById(id).value; });
+    data.textFields['paradigm'] = paradigmSelect.value;
+    data.textFields['bias'] = biasSelect.value;
+    data.toggles['budget-toggle'] = toggleVal('budget-toggle');
+    data.toggles['timing-toggle'] = toggleVal('timing-toggle');
+    data.toggles['precedent-toggle'] = toggleVal('precedent-toggle');
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Rhetorical_Situation_Profile_Progress.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function loadJSON(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      let data;
+      try {
+        data = JSON.parse(e.target.result);
+      } catch (err) {
+        alert("That file couldn't be read. Make sure you're selecting a Progress File you saved from this worksheet.");
+        return;
+      }
+      if (!data.textFields) {
+        alert("That file doesn't look like a saved progress file from this worksheet.");
+        return;
+      }
+      Object.keys(data.textFields).forEach(id => {
+        const el = document.getElementById(id);
+        if (el && (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT')) {
+          el.value = data.textFields[id];
+          el.dispatchEvent(new Event('input'));
+        }
+      });
+      if (data.textFields['paradigm']) {
+        paradigmSelect.value = data.textFields['paradigm'];
+        paradigmSelect.dispatchEvent(new Event('change'));
+      }
+      if (data.textFields['bias']) {
+        biasSelect.value = data.textFields['bias'];
+        biasSelect.dispatchEvent(new Event('change'));
+      }
+      if (data.toggles) {
+        Object.keys(data.toggles).forEach(name => {
+          const value = data.toggles[name];
+          if (!value) return;
+          const radio = document.querySelector(`input[name="${name}"][value="${value}"]`);
+          if (radio) {
+            radio.checked = true;
+            radio.dispatchEvent(new Event('change'));
+          }
+        });
+      }
+      updateCards();
+      updateSummary();
+      alert("Your saved progress has been loaded back in.");
+    };
+    reader.readAsText(file);
+    event.target.value = '';
+  }
+
+
+
+
+
+  // Size each writing box so its full example text is visible
+  function fitPlaceholder(el) {
+    const ph = el.getAttribute('placeholder');
+    if (!ph || el.offsetWidth === 0) return;
+    const cs = getComputedStyle(el);
+    const mirror = document.createElement('div');
+    mirror.style.cssText = 'position:absolute;visibility:hidden;white-space:pre-wrap;word-wrap:break-word;box-sizing:border-box;'
+      + 'width:' + el.offsetWidth + 'px;font:' + cs.font + ';padding:' + cs.padding + ';border:' + cs.border + ';line-height:' + cs.lineHeight + ';';
+    mirror.textContent = ph;
+    document.body.appendChild(mirror);
+    const needed = mirror.offsetHeight + 8;
+    document.body.removeChild(mirror);
+    el.style.minHeight = Math.max(70, needed) + 'px';
+  }
+  function fitAllPlaceholders() {
+    document.querySelectorAll('textarea').forEach(fitPlaceholder);
+  }
+  window.addEventListener('resize', fitAllPlaceholders);
+  window.addEventListener('load', fitAllPlaceholders);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAllPlaceholders);
+
+
+  // ---- Effort guardrails: word minimums, unique-word check, required choices ----
+  const WB = 'Reading Workbook, ';
+  const GUARDS = [
+    { id:'student-name', label:'Step 1: Your name and who you are', min:25, ref:'Section B, "Your Role: why should they listen to you?" (the background part)' },
+    { id:'job-title', label:'Step 1: Job title and how long you have held it', min:25, ref:'Section B, "Your Role: why should they listen to you?" (what you do, how often, how long)' },
+    { id:'role-combined', label:'Step 1: Your role', min:50, ref:'Section B, "Your Role: why should they listen to you?" (see Dani\'s revision)' },
+    { id:'sup-combined', label:'Step 2: Who they are and the moment you remember', min:70, ref:'Section C, "Your Supervisor: pick a real person" (write a memory, not a description)' },
+    { id:'paradigm-why', label:'Step 2: Why this paradigm matches them', min:40, ref:'Section D, "Your Supervisor: how they see work and where they lean" (point to a real moment)' },
+    { id:'bias-why', label:'Step 2: Why this bias matches them', min:40, ref:'Section D, "Your Supervisor: how they see work and where they lean" (point to a real moment)' },
+    { id:'identity', label:'Step 2: Generational or cultural identity', min:30, ref:'Section D, "Your Supervisor: how they see work and where they lean" (the identity part)' },
+    { id:'sup-priority', label:'Step 2: What matters most to them', min:25, ref:'Section D, "Your Supervisor: how they see work and where they lean"' },
+    { id:'problem-combined', label:'Step 3: The problem, with the incident', min:70, ref:'Section E, "The Problem and the Ask" (one real incident with numbers)' },
+    { id:'cost-nothing', label:'Step 3: Cost of doing nothing', min:35, ref:'Section E, "The Problem and the Ask" (the cost of doing nothing)' },
+    { id:'one-ask', label:'Step 3: The ask', min:15, ref:'Section E, "The Problem and the Ask" (name the exact item and the decision)' },
+    { id:'budget-explain', label:'Step 4: Budget cycle explanation', min:25, ref:'Section F, "The Situation on the Ground" (see how Dani explained it)' },
+    { id:'timing-explain', label:'Step 4: Timing pressure explanation', min:25, ref:'Section F, "The Situation on the Ground" (see how Dani explained it)' },
+    { id:'precedent-explain', label:'Step 4: Precedent explanation', min:25, ref:'Section F, "The Situation on the Ground" (see how Dani explained it)' },
+    { id:'equipment-combined', label:'Step 5: Current setup vs. what you are proposing', min:50, ref:'Section G, "The Equipment or Tool" (measurable terms for what you have now)' },
+    { id:'feat1', label:'Step 5: Feature 1', min:2, ref:'Section G, "The Equipment or Tool" (a real feature, not "better")', short:true },
+    { id:'feat1-why', label:'Step 5: Feature 1, why it matters', min:20, ref:'Section G, "The Equipment or Tool" (tie it back to your Step 3 problem)' },
+    { id:'feat2', label:'Step 5: Feature 2', min:2, ref:'Section G, "The Equipment or Tool" (a real feature, not "better")', short:true },
+    { id:'feat2-why', label:'Step 5: Feature 2, why it matters', min:20, ref:'Section G, "The Equipment or Tool" (tie it back to your Step 3 problem)' }
+  ];
+  function wc(t) { const m = (t || '').trim().match(/\S+/g); return m ? m.length : 0; }
+  function uniq(t) { const m = (t || '').toLowerCase().match(/[a-z0-9']+/g) || []; return new Set(m).size; }
+  function guardState(g) {
+    const t = val(g.id), n = wc(t);
+    const needUnique = g.short ? 1 : Math.ceil(g.min * 0.5);
+    const ok = n >= g.min && uniq(t) >= needUnique;
+    return { n, ok, repeated: n >= g.min && !ok };
+  }
+  function guardsOk() {
+    if (!paradigmSelect.value || !biasSelect.value) return false;
+    if (!toggleVal('budget-toggle') || !toggleVal('timing-toggle') || !toggleVal('precedent-toggle')) return false;
+    return GUARDS.every(g => guardState(g).ok);
+  }
+  function setupGuards() {
+    GUARDS.forEach(g => {
+      const el = document.getElementById(g.id);
+      const d = document.createElement('div');
+      d.className = 'wc'; d.id = 'wc-' + g.id;
+      el.insertAdjacentElement('afterend', d);
+    });
+  }
+  const STEPS = [
+    { name:'Step 1: Your Role', fields:['student-name','job-title','role-combined'] },
+    { name:'Step 2: Your Supervisor', fields:['sup-combined','paradigm','paradigm-why','bias','bias-why','identity','sup-priority'] },
+    { name:'Step 3: The Problem and the Ask', fields:['problem-combined','cost-nothing','one-ask'] },
+    { name:'Step 4: The Situation on the Ground', fields:['budget-yes','budget-explain','timing-yes','timing-explain','precedent-yes','precedent-explain'] },
+    { name:'Step 5: The Equipment or Tool', fields:['equipment-combined','feat1','feat1-why','feat2','feat2-why'] }
+  ];
+  function partOk(id) {
+    if (id === 'paradigm') return !!paradigmSelect.value;
+    if (id === 'bias') return !!biasSelect.value;
+    if (/-yes$/.test(id)) return !!toggleVal(id.replace('-yes', '-toggle'));
+    const g = GUARDS.find(x => x.id === id);
+    return g ? guardState(g).ok : true;
+  }
+  function updateGuards() {
+    if (!document.getElementById('guard-status')) return;
+    GUARDS.forEach(g => {
+      const d = document.getElementById('wc-' + g.id); if (!d) return;
+      const st = guardState(g);
+      if (st.ok) { d.className = 'wc ok'; d.textContent = st.n + ' words. Minimum met.'; }
+      else {
+        d.className = 'wc';
+        d.innerHTML = st.n + ' of ' + g.min + ' words minimum.' +
+          '<span class="hint">' + (st.repeated ? 'Write real sentences, not repeated words. ' : 'Stuck? ') + 'Go back to the ' + WB + g.ref + '.</span>';
+      }
+    });
+    let doneCount = 0;
+    const rows = STEPS.map(st => {
+      const missing = st.fields.filter(id => !partOk(id));
+      const done = missing.length === 0;
+      if (done) doneCount++;
+      const status = done ? '<span class="gs-ok">Complete</span>' : '<span class="gs-todo">' + (st.fields.length - missing.length) + ' of ' + st.fields.length + ' parts done</span>';
+      return '<li class="' + (done ? 'gs-done' : '') + '"><a onclick="jumpTo(\'' + (missing[0] || st.fields[0]) + '\')">' + st.name + '</a>' + status + '</li>';
+    });
+    const box = document.getElementById('guard-status'), btn = document.getElementById('pdf-btn');
+    const all = doneCount === STEPS.length;
+    box.className = 'guard-box' + (all ? ' done' : '');
+    box.innerHTML = '<b>' + (all ? 'All five steps are complete.' : 'Your progress: ' + doneCount + ' of ' + STEPS.length + ' steps complete') + '</b><ul class="gs-list">' + rows.join('') + '</ul>' +
+      (all ? '<p class="gs-note">Read back over your answers once, then download your PDF.</p>' : '<p class="gs-note">Your PDF is available when all five steps are complete.</p>');
+    btn.disabled = !all;
+  }
+  function jumpTo(id) {
+    let el = document.getElementById(id);
+    if (el && !el.offsetParent) el = document.querySelector('label[for="' + id + '"]') || el;
+    if (el) { el.scrollIntoView({ behavior:'smooth', block:'center' }); if (el.focus && el.type !== 'radio') el.focus(); }
+  }
+  setupGuards();
+  document.querySelectorAll('textarea, input[type=text]').forEach(el => el.addEventListener('input', updateGuards));
+
+  updateCards();
+  updateSummary();
+  fitAllPlaceholders();
+
+</script>
+</body>
+</html>
