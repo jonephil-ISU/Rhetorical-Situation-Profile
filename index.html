@@ -700,7 +700,7 @@
       <div class="sub-block">
         <div class="sub-label">The ask</div>
         <label for="one-ask">State exactly what you want approved. A couple of sentences, no hedging.</label>
-        <textarea id="one-ask" maxlength="300" class="locked-input" style="min-height:90px;" placeholder="e.g. Approve buying a second lift, about $5,300, so the shop is never down to one lift."></textarea>
+        <textarea id="one-ask" maxlength="300" class="locked-input" style="min-height:90px;" placeholder="e.g. I am asking you to approve buying a second lift, around $5,300, so the shop is never down to one lift."></textarea>
       </div>
 
       <div class="callout"><b>Coach's Corner:</b> Vague problems get vague approvals. "Our equipment is old" won't cut it, name what it's costing you in time, safety, or quality.</div>
@@ -851,8 +851,10 @@
       <p class="step-prompt">When everything above is complete, download your PDF and submit that file for the Week 1 assignment.</p>
       <div class="guard-box" id="guard-status"></div>
       <div class="copy-row">
-        <button class="btn" id="pdf-btn" style="background:var(--navy);" onclick="generatePDF()" disabled>Download PDF</button>
+        <button class="btn" id="pdf-btn" style="background:var(--navy);" onclick="generatePDF()" disabled>Download PDF for Canvas</button>
+        <button class="btn" id="word-btn" onclick="generateWord()" disabled>Download Word Doc to Copy Into Week 2</button>
       </div>
+      <p style="font-size:13px;margin-top:10px;"><b>PDF:</b> this is what you upload to the Week 1 assignment in Canvas.<br><b>Word doc:</b> this is not turned in. Use it to copy and paste your ask and problem into Week 2 with ease.</p>
       <p style="font-size:12.5px; color:var(--muted); margin-top:10px;">The PDF button opens your browser's print window. Choose "Save as PDF" as the destination, then submit that file for the Week 1 assignment. Chrome works best.</p>
       <div class="copy-row" style="margin-top:14px;">
         <button class="btn secondary" onclick="generateJSON()">Save Progress File</button>
@@ -1145,6 +1147,53 @@
 
 
 
+  function generateWord() {
+    // Builds a real .docx (a zip of XML files) in the browser. No outside libraries.
+    const P = [];
+    const para = (text, o) => P.push({ t: text || '', o: o || {} });
+    const field = (label, id) => { para(label, { b: 1, c: '0B1F3A', sz: 19, before: 160 }); para(val(id), { sz: 22 }); };
+    const h2 = t => para(t, { b: 1, c: '0B1F3A', sz: 26, before: 360, shade: 'EEF1F6' });
+    para('Week 1: Your Answers to Copy Into Week 2', { b: 1, c: '0B1F3A', sz: 36 });
+    para('TGE 1150. Use this Word file to copy and paste your ask and problem into the Week 2 worksheet. This is not what you turn in. Turn in the PDF in Canvas.', { c: '5B6472', sz: 20 });
+    h2('Your Target');
+    field('The Ask', 'one-ask'); field('The Problem, with the incident that proves it', 'problem-combined');
+
+    const x = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const body = P.map(p => {
+      const o = p.o;
+      const rpr = '<w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:cs="Calibri"/>' + (o.b ? '<w:b/>' : '') + (o.c ? '<w:color w:val="' + o.c + '"/>' : '') + '<w:sz w:val="' + (o.sz || 22) + '"/></w:rPr>';
+      const ppr = '<w:pPr>' + (o.shade ? '<w:shd w:val="clear" w:color="auto" w:fill="' + o.shade + '"/>' : '') + '<w:spacing w:before="' + (o.before || 0) + '" w:after="40"/></w:pPr>';
+      const runs = p.t.split(/\r?\n/).map((ln, k) => '<w:r>' + rpr + (k ? '<w:br/>' : '') + '<w:t xml:space="preserve">' + x(ln) + '</w:t></w:r>').join('');
+      return '<w:p>' + ppr + runs + '</w:p>';
+    }).join('');
+    const files = {
+      '[Content_Types].xml': '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>',
+      '_rels/.rels': '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>',
+      'word/document.xml': '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>' + body + '<w:sectPr><w:pgSz w:w="12240" w:h="15840"/><w:pgMar w:top="1080" w:right="1080" w:bottom="1080" w:left="1080" w:header="720" w:footer="720" w:gutter="0"/></w:sectPr></w:body></w:document>'
+    };
+    // minimal zip writer (stored, no compression)
+    const enc = new TextEncoder();
+    const tbl = []; for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; tbl[n] = c >>> 0; }
+    const crc = d => { let c = 0xFFFFFFFF; for (let i = 0; i < d.length; i++) c = tbl[(c ^ d[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; };
+    const u16 = n => [n & 255, (n >>> 8) & 255], u32 = n => [n & 255, (n >>> 8) & 255, (n >>> 16) & 255, (n >>> 24) & 255];
+    const parts = [], central = []; let off = 0;
+    Object.keys(files).forEach(name => {
+      const nm = enc.encode(name), d = enc.encode(files[name]), cr = crc(d);
+      const lh = new Uint8Array([0x50, 0x4B, 3, 4, ...u16(20), ...u16(0x0800), ...u16(0), ...u16(0), ...u16(0x21), ...u32(cr), ...u32(d.length), ...u32(d.length), ...u16(nm.length), ...u16(0)]);
+      parts.push(lh, nm, d);
+      central.push(new Uint8Array([0x50, 0x4B, 1, 2, ...u16(20), ...u16(20), ...u16(0x0800), ...u16(0), ...u16(0), ...u16(0x21), ...u32(cr), ...u32(d.length), ...u32(d.length), ...u16(nm.length), ...u16(0), ...u16(0), ...u16(0), ...u16(0), ...u32(0), ...u32(off)]), nm);
+      off += lh.length + nm.length + d.length;
+    });
+    let csz = 0; central.forEach(c => csz += c.length);
+    const eocd = new Uint8Array([0x50, 0x4B, 5, 6, ...u16(0), ...u16(0), ...u16(Object.keys(files).length), ...u16(Object.keys(files).length), ...u32(csz), ...u32(off), ...u16(0)]);
+    const blob = new Blob(parts.concat(central, [eocd]), { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'Week1_Answers_to_Copy_Into_Week2.docx';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
   function generateJSON() {
     const data = {
       exportType: "TGE 1150 Rhetorical Situation Profile Progress Save",
@@ -1336,7 +1385,7 @@
     box.className = 'guard-box' + (all ? ' done' : '');
     box.innerHTML = '<b>' + (all ? 'All five steps are complete.' : 'Your progress: ' + doneCount + ' of ' + STEPS.length + ' steps complete') + '</b><ul class="gs-list">' + rows.join('') + '</ul>' +
       (all ? '<p class="gs-note">Read back over your answers once, then download your PDF.</p>' : '<p class="gs-note">Your PDF is available when all five steps are complete.</p>');
-    btn.disabled = !all;
+    btn.disabled = !all; document.getElementById('word-btn').disabled = !all;
   }
   function jumpTo(id) {
     let el = document.getElementById(id);
